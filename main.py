@@ -18,8 +18,6 @@ TIKTOK_USERS = [
 
 ALLOWED_USERS = {
     662596869221908480
-    1280038439202590802
-
 }
 
 PING_ROLE = "@everyone"
@@ -28,7 +26,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot = commands.Bot(command_prefix="$", intents=intents)
 
 last_videos = {}
 live_sent = {}
@@ -143,7 +141,7 @@ async def kick(ctx, member: discord.Member, *, reason="Kein Grund angegeben"):
 
 @bot.command()
 @is_allowed()
-async def timeout(ctx, member: discord.Member, minutes: int, *, reason="Kein Grund angegeben"):
+async def to(ctx, member: discord.Member, minutes: int, *, reason="Kein Grund angegeben"):
 
     duration = timedelta(minutes=minutes)
 
