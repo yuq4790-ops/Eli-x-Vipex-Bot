@@ -1,3 +1,4 @@
+from os.path import join
 import os
 import discord
 from discord.ext import commands, tasks
@@ -103,16 +104,6 @@ async def start_live_client(username):
         await asyncio.sleep(10)
 
 
-@bot.event
-async def on_ready():
-    print(f"Logged in as {bot.user}")
-
-    check_videos.start()
-
-    for user in TIKTOK_USERS:
-        bot.loop.create_task(start_live_client(user))
-
-
 
 # MODERATION 
 
@@ -172,5 +163,218 @@ async def on_command_error(ctx, error):
     else:
         print(error)
 
+bot = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 
+@bot.command()
+@commands.has_permissions(manage_channels=True)
+async def lock(ctx, channel: discord.TextChannel = None, *, note=None):
+    if channel is None:
+        channel = ctx.channel
+    overwrite = channel.overwrites_for(ctx.guild.default_role)
+    overwrite.send_messages = False
+    await channel.set_permissions(
+        ctx.guild.default_role,
+        overwrite=overwrite
+    )
+    embed = discord.Embed(
+        title="Channel locked",
+        color=discord.Color.dark_purple()
+    )
+    embed.add_field(
+        name="Channel",
+        value=channel.mention,
+        inline=False
+    )
+    embed.add_field(
+        name="locked from",
+        value=ctx.author.mention,
+        inline=False
+    )
+    embed.add_field(
+        name="Notice",
+        value=note if note else "No Notice.",
+        inline=False
+    )
+    if ctx.guild.icon:
+        embed.set_thumbnail(url=ctx.guild.icon.url)
+    if ctx.guild.banner:
+        embed.set_image(url=ctx.guild.banner.url)
+
+    embed.set_footer(
+        text=f"{ctx.guild.name}"
+    )
+    await ctx.send(embed=embed)
+
+
+       #-------------welcome panel-----------
+
+
+WELCOME_CHANNEL_ID = 1470008906934648954
+
+class VerifyView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+        self.add_item(
+            discord.ui.Button(
+                label="Zur Verifizierung!",
+                style=discord.ButtonStyle.success,
+                url="https://discord.gg/4AVWHSZsuR"
+            )
+        )
+        self.add_item(
+            discord.ui.Button(
+                label="Vipex Tiktok",
+                style=discord.ButtonStyle.link,
+                url="https://www.tiktok.com/@vipexak"
+            )
+        )
+        self.add_item(
+            discord.ui.Button(
+                label="Elixo Tiktok",
+                style=discord.ButtonStyle.link,
+                url="https://www.tiktok.com/@eli97xo"
+            )
+        )
+
+
+@bot.event
+async def on_member_join(member):
+    channel = bot.get_channel(WELCOME_CHANNEL_ID)
+
+    embed = discord.Embed(
+        title="**Willkommen!**",
+        description=(
+            f"**Hey {member.mention}. Schön das du hier bist!**\n\n"
+            "- **Info:**\n"
+            "> Mit der Verifizierung stimmst du unserem Regelwerk zu.\n"
+            "> Du kannst dieses jederzeit unter <#1512570681580060702> einsehen.\n\n"
+            "- **Verifizierung:**\n"
+            "> Bevor du richtig loslegen kannst, musst du dich noch freischalten,"
+            " um Zugriff auf alle Kanäle zu erhalten."
+
+        ),
+        color=discord.Color.blurple()
+    )
+
+
+    embed.set_image(
+        url="https://cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?size=1024"
+    )
+
+
+
+    await channel.send(
+        content=f"Willkommen{member.mention}!",
+        embed=embed,
+        view=VerifyView()
+    )
+
+
+#----------------verify panel-------
+
+GUILD_ID = 1440371431991935169
+VERIFY_ROLE_ID = 1441758416292024445
+
+class VerifyView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @discord.ui.button(
+        label="✅ Verifizieren",
+        style=discord.ButtonStyle.success,
+        custom_id="verify_button"
+    )
+    async def verify_button(
+        self,
+        interaction: discord.Interaction,
+        button: discord.ui.Button
+    ):
+        role = interaction.guild.get_role(VERIFY_ROLE_ID)
+
+        if role is None:
+            await interaction.response.send_message(
+                "❌ Rolle nicht gefunden.",
+                ephemeral=True
+            )
+            return
+
+        if role in interaction.user.roles:
+            await interaction.response.send_message(
+                "✅ Du bist bereits verifiziert.",
+                ephemeral=True
+            )
+            return
+
+        await interaction.user.add_roles(role)
+
+        await interaction.response.send_message(
+            "✅ Du wurdest erfolgreich verifiziert!",
+            ephemeral=True
+        )
+
+
+@bot.tree.command(
+    name="verifypanel",
+    description="Erstellt das Verifizierungspanel",
+    guild=discord.Object(id=GUILD_ID)
+)
+async def verifypanel(interaction: discord.Interaction):
+
+    embed = discord.Embed(
+        title="           Verifizierung",
+        color=discord.Color.blurple()
+    )
+
+    embed.add_field(
+        name="Informationen",
+        value=(
+            "> Mit der Verifizierung stimmst du unserem\n"
+            "> Regelwerk zu.\n\n"
+            "> Nach erfolgreicher Verifizierung erhältst du\n"
+            "> Zugriff auf alle Kanäle."
+        ),
+        inline=False
+    )
+
+    embed.set_image(
+        url="https://cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?size=1024"
+    )
+
+    await interaction.channel.send(
+        embed=embed,
+        view=VerifyView()
+    )
+
+    await interaction.response.send_message(
+        "Verify Panel erstellt.",
+        ephemeral=True
+    )
+
+#-------------bot ready-------------
+
+@bot.event
+async def on_ready():
+
+    bot.add_view(VerifyView())
+
+    try:
+        synced = await bot.tree.sync(
+            guild=discord.Object(id=GUILD_ID)
+        )
+
+        print(f"{len(synced)} Commands synchronisiert.")
+
+    except Exception as e:
+        print(f"Sync Fehler: {e}")
+
+    print(f"Logged in als {bot.user}")
+
+    if not check_videos.is_running():
+        check_videos.start()
+
+    for user in TIKTOK_USERS:
+        bot.loop.create_task(
+            start_live_client(user)
+        )
 bot.run(TOKEN)
