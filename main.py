@@ -163,7 +163,6 @@ async def on_command_error(ctx, error):
     else:
         print(error)
 
-bot = commands.Bot(command_prefix="$", intents=discord.Intents.all())
 
 @bot.command()
 @commands.has_permissions(manage_channels=True)
