@@ -248,7 +248,7 @@ async def on_member_join(member):
             f"**Hey {member.mention}. Schön das du hier bist!**\n\n"
             "- **Info:**\n"
             "> Mit der Verifizierung stimmst du unserem Regelwerk zu.\n"
-            "> Du kannst dieses jederzeit unter <#1512570681580060702> einsehen.\n\n"
+            "> Du kannst dieses jederzeit unter <#1440371432877199397> einsehen.\n\n"
             "- **Verifizierung:**\n"
             "> Bevor du richtig loslegen kannst, musst du dich noch freischalten,"
             " um Zugriff auf alle Kanäle zu erhalten."
