@@ -263,11 +263,10 @@ async def on_member_join(member):
     )
 
 
-
     await channel.send(
-        content=f"Willkommen{member.mention}!",
-        embed=embed,
-        view=VerifyView()
+    content=f"Willkommen {member.mention}!",
+    embed=embed,
+    view=WelcomeView()
     )
 
 
@@ -276,7 +275,7 @@ async def on_member_join(member):
 GUILD_ID = 1440371431991935169
 VERIFY_ROLE_ID = 1441758416292024445
 
-class VerifyView(discord.ui.View):
+class VerifyPanelView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
@@ -343,7 +342,7 @@ async def verifypanel(interaction: discord.Interaction):
 
     await interaction.channel.send(
         embed=embed,
-        view=VerifyView()
+        view=VerifyPanelView()
     )
 
     await interaction.response.send_message(
@@ -356,7 +355,7 @@ async def verifypanel(interaction: discord.Interaction):
 @bot.event
 async def on_ready():
 
-    bot.add_view(VerifyView())
+    bot.add_view(VerifyPanelView())
 
     try:
         synced = await bot.tree.sync(
