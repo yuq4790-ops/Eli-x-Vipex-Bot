@@ -210,17 +210,18 @@ async def lock(ctx, channel: discord.TextChannel = None, *, note=None):
 
 WELCOME_CHANNEL_ID = 1470008906934648954
 
-class VerifyView(discord.ui.View):
+class WelcomeView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
 
         self.add_item(
             discord.ui.Button(
                 label="Zur Verifizierung!",
-                style=discord.ButtonStyle.success,
+                style=discord.ButtonStyle.link,
                 url="https://discord.gg/4AVWHSZsuR"
             )
         )
+
         self.add_item(
             discord.ui.Button(
                 label="Vipex Tiktok",
@@ -228,6 +229,7 @@ class VerifyView(discord.ui.View):
                 url="https://www.tiktok.com/@vipexak"
             )
         )
+
         self.add_item(
             discord.ui.Button(
                 label="Elixo Tiktok",
@@ -235,7 +237,6 @@ class VerifyView(discord.ui.View):
                 url="https://www.tiktok.com/@eli97xo"
             )
         )
-
 
 @bot.event
 async def on_member_join(member):
