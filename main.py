@@ -218,7 +218,7 @@ class WelcomeView(discord.ui.View):
             discord.ui.Button(
                 label="Zur Verifizierung!",
                 style=discord.ButtonStyle.link,
-                url="https://discord.gg/4AVWHSZsuR"
+                url="https://discord.gg/FKjSYygj2f"
             )
         )
 
@@ -329,7 +329,7 @@ async def verifypanel(interaction: discord.Interaction):
         name="Informationen",
         value=(
             "> Mit der Verifizierung stimmst du unserem\n"
-            "> Regelwerk zu.\n\n"
+            "> <#1440371432877199397> zu.\n\n"
             "> Nach erfolgreicher Verifizierung erhältst du\n"
             "> Zugriff auf alle Kanäle."
         ),
