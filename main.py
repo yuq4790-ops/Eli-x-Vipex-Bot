@@ -362,7 +362,7 @@ async def verifypanel(interaction: discord.Interaction):
 #-------------Activity--------------------
 
 statuses = [
-    "Skybase Server zu",
+    "Skybase Server",
     "Hosted by Yuqii",
     "discord.gg/skybase",
 ]
