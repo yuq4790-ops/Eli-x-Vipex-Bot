@@ -263,12 +263,12 @@ async def on_member_join(member):
         url="https://cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?size=1024"
     )
 
-    await channel.send(
+
+ await channel.send(
     content=f"Willkommen {member.mention}!",
     embed=embed,
     view=WelcomeView()
 )
-
 
 
 
