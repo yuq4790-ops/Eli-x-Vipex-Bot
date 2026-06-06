@@ -359,57 +359,6 @@ async def verifypanel(interaction: discord.Interaction):
     )
 
 
-
-#----------logs---------------
-MESSAGE_LOGS = 1512809636053520576
-VOICE_LOGS = 1512809672774521043
-MODERATION_LOGS = 1512809779398049853
-WARNING_LOGS = 1512812329803452466
-
-
-
-@bot.event
-async def on_message_delete(message):
-    if message.author.bot:
-        return
-
-    channel = bot.get_channel(MESSAGE_LOGS)
-
-    embed = discord.Embed(
-        title="🗑Nachricht gelöscht",
-        color=discord.Color.red(),
-        timestamp=datetime.utcnow()
-    )
-
-    embed.add_field(name="User", value=message.author.mention, inline=False)
-    embed.add_field(name="Channel", value=message.channel.mention, inline=False)
-    embed.add_field(name="Inhalt", value=message.content or "Kein Text", inline=False)
-
-    await channel.send(embed=embed)
-
-
-@bot.event
-async def on_message_edit(before, after):
-    if before.author.bot:
-        return
-
-    if before.content == after.content:
-        return
-
-    channel = bot.get_channel(MESSAGE_LOGS)
-
-    embed = discord.Embed(
-        title="Nachricht bearbeitet",
-        color=discord.Color.orange(),
-        timestamp=datetime.utcnow()
-    )
-
-    embed.add_field(name="User", value=before.author.mention, inline=False)
-    embed.add_field(name="Channel", value=before.channel.mention, inline=False)
-    embed.add_field(name="Vorher", value=before.content[:1024], inline=False)
-    embed.add_field(name="Nachher", value=after.content[:1024], inline=False)
-
-    await channel.send(embed=embed)
 #-------------bot ready-------------
 
 @bot.event
