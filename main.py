@@ -308,10 +308,10 @@ class VerifyPanelView(discord.ui.View):
             )
             return
 
-        # Verifizierungsrolle vergeben
+        
         await interaction.user.add_roles(verify_role)
 
-        # Alte Rolle entfernen
+        
         if remove_role and remove_role in interaction.user.roles:
             await interaction.user.remove_roles(remove_role)
 
