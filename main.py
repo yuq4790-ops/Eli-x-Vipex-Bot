@@ -7,6 +7,7 @@ from TikTokLive.events import ConnectEvent
 import asyncio
 from datetime import timedelta
 
+
 TOKEN = os.getenv("TOKEN")
 
 LIVE_CHANNEL_ID = 1442092783690055803
@@ -358,6 +359,28 @@ async def verifypanel(interaction: discord.Interaction):
         ephemeral=True
     )
 
+#-------------Activity--------------------
+
+statuses = [
+    "Skybase Server zu",
+    "Hosted by Yuqii",
+    "discord.gg/skybase",
+]
+
+status_index = 0
+
+@tasks.loop(seconds=5)
+async def rotate_status():
+    global status_index
+
+    activity = discord.Activity(
+        type=discord.ActivityType.watching,
+        name=statuses[status_index]
+    )
+
+    await bot.change_presence(activity=activity)
+
+    status_index = (status_index + 1) % len(statuses)
 
 #-------------bot ready-------------
 
@@ -385,4 +408,7 @@ async def on_ready():
         bot.loop.create_task(
             start_live_client(user)
         )
+    if not rotate_status.is_running():
+        rotate_status.start()
+        
 bot.run(TOKEN)
