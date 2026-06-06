@@ -272,7 +272,10 @@ async def on_member_join(member):
 #----------------verify panel-------
 
 GUILD_ID = 1440371431991935169
-VERIFY_ROLE_ID = 1441758416292024445
+
+VERIFY_ROLE_ID = 1441758416292024445     
+REMOVE_ROLE_ID = 1512604669426536549      
+
 
 class VerifyPanelView(discord.ui.View):
     def __init__(self):
@@ -288,23 +291,29 @@ class VerifyPanelView(discord.ui.View):
         interaction: discord.Interaction,
         button: discord.ui.Button
     ):
-        role = interaction.guild.get_role(VERIFY_ROLE_ID)
+        verify_role = interaction.guild.get_role(VERIFY_ROLE_ID)
+        remove_role = interaction.guild.get_role(REMOVE_ROLE_ID)
 
-        if role is None:
+        if verify_role is None:
             await interaction.response.send_message(
-                "❌ Rolle nicht gefunden.",
+                "❌ Verifizierungsrolle nicht gefunden.",
                 ephemeral=True
             )
             return
 
-        if role in interaction.user.roles:
+        if verify_role in interaction.user.roles:
             await interaction.response.send_message(
                 "✅ Du bist bereits verifiziert.",
                 ephemeral=True
             )
             return
 
-        await interaction.user.add_roles(role)
+        # Verifizierungsrolle vergeben
+        await interaction.user.add_roles(verify_role)
+
+        # Alte Rolle entfernen
+        if remove_role and remove_role in interaction.user.roles:
+            await interaction.user.remove_roles(remove_role)
 
         await interaction.response.send_message(
             "✅ Du wurdest erfolgreich verifiziert!",
@@ -320,12 +329,12 @@ class VerifyPanelView(discord.ui.View):
 async def verifypanel(interaction: discord.Interaction):
 
     embed = discord.Embed(
-        title="           Verifizierung",
+        title="🔐 Verifizierung",
         color=discord.Color.blurple()
     )
 
     embed.add_field(
-        name="Informationen",
+        name="📜 Informationen",
         value=(
             "> Mit der Verifizierung stimmst du unserem\n"
             "> <#1440371432877199397> zu.\n\n"
@@ -345,7 +354,7 @@ async def verifypanel(interaction: discord.Interaction):
     )
 
     await interaction.response.send_message(
-        "Verify Panel erstellt.",
+        "✅ Verify Panel erstellt.",
         ephemeral=True
     )
 
