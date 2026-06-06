@@ -362,14 +362,15 @@ async def verifypanel(interaction: discord.Interaction):
 #-------------Activity--------------------
 
 statuses = [
-    "Skybase Server",
+    "Skybase System",
     "Hosted by Yuqii",
     "discord.gg/skybase",
+    "🎉Giveaway Incoming!🎉",
 ]
 
 status_index = 0
 
-@tasks.loop(seconds=3)
+@tasks.loop(seconds=2)
 async def rotate_status():
     global status_index
 
