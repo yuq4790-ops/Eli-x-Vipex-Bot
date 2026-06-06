@@ -362,10 +362,11 @@ async def verifypanel(interaction: discord.Interaction):
 #-------------Activity--------------------
 
 statuses = [
-    "Skybase System",
-    "Hosted by Yuqii",
     "discord.gg/skybase",
+    "Hosted by Yuqii",
+    "Skybase System",
     "🎉Giveaway Incoming!🎉",
+    "Verify to Chatting!",
 ]
 
 status_index = 0
