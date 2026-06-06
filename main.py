@@ -263,11 +263,6 @@ async def on_member_join(member):
     )
 
 
-    await channel.send(
-    content=f"Willkommen {member.mention}!",
-    embed=embed,
-    view=WelcomeView()
-    )
 
 
 #----------------verify panel-------
