@@ -251,24 +251,21 @@ async def on_member_join(member):
             "> Mit der Verifizierung stimmst du unserem Regelwerk zu.\n"
             "> Du kannst dieses jederzeit unter <#1440371432877199397> einsehen.\n\n"
             "- **Verifizierung:**\n"
-            "> Bevor du richtig loslegen kannst, musst du dich noch freischalten,"
-            " um Zugriff auf alle Kanäle zu erhalten."
-
+            "> Bevor du richtig loslegen kannst, musst du dich noch freischalten,\n"
+            "> um Zugriff auf alle Kanäle zu erhalten."
         ),
         color=discord.Color.blurple()
     )
-
 
     embed.set_image(
         url="https://cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?size=1024"
     )
 
-
- await channel.send(
-    content=f"Willkommen {member.mention}!",
-    embed=embed,
-    view=WelcomeView()
-)
+    await channel.send(
+        content=f"Willkommen {member.mention}!",
+        embed=embed,
+        view=WelcomeView()
+    )
 
 
 
