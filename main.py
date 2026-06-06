@@ -282,7 +282,7 @@ class VerifyPanelView(discord.ui.View):
         super().__init__(timeout=None)
 
     @discord.ui.button(
-        label="✅ Verifizieren",
+        label="Verifizieren",
         style=discord.ButtonStyle.success,
         custom_id="verify_button"
     )
@@ -296,14 +296,14 @@ class VerifyPanelView(discord.ui.View):
 
         if verify_role is None:
             await interaction.response.send_message(
-                "❌ Verifizierungsrolle nicht gefunden.",
+                "Verifizierungsrolle nicht gefunden.",
                 ephemeral=True
             )
             return
 
         if verify_role in interaction.user.roles:
             await interaction.response.send_message(
-                "✅ Du bist bereits verifiziert.",
+                "Du bist bereits verifiziert.",
                 ephemeral=True
             )
             return
@@ -316,7 +316,7 @@ class VerifyPanelView(discord.ui.View):
             await interaction.user.remove_roles(remove_role)
 
         await interaction.response.send_message(
-            "✅ Du wurdest erfolgreich verifiziert!",
+            "Du wurdest erfolgreich verifiziert!",
             ephemeral=True
         )
 
@@ -329,12 +329,12 @@ class VerifyPanelView(discord.ui.View):
 async def verifypanel(interaction: discord.Interaction):
 
     embed = discord.Embed(
-        title="🔐 Verifizierung",
+        title="Verifizierung",
         color=discord.Color.blurple()
     )
 
     embed.add_field(
-        name="📜 Informationen",
+        name="Informationen",
         value=(
             "> Mit der Verifizierung stimmst du unserem\n"
             "> <#1440371432877199397> zu.\n\n"
@@ -354,7 +354,7 @@ async def verifypanel(interaction: discord.Interaction):
     )
 
     await interaction.response.send_message(
-        "✅ Verify Panel erstellt.",
+        "Verify Panel erstellt.",
         ephemeral=True
     )
 
