@@ -369,12 +369,12 @@ statuses = [
 
 status_index = 0
 
-@tasks.loop(seconds=5)
+@tasks.loop(seconds=3)
 async def rotate_status():
     global status_index
 
     activity = discord.Activity(
-        type=discord.ActivityType.watching,
+        type=discord.ActivityType.listening,
         name=statuses[status_index]
     )
 
