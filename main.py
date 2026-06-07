@@ -391,8 +391,15 @@ VOICE_CHANNEL_ID = 1513217517588582445
 @bot.event
 async def on_voice_state_update(member, before, after):
     if member.id == bot.user.id and after.channel is None:
-        channel = bot.get_channel(VOICE_CHANNEL_ID)
-        await channel.connect()
+        try:
+            guild = bot.get_guild(GUILD_ID)
+            channel = guild.get_channel(VOICE_CHANNEL_ID)
+
+            if channel:
+                await channel.connect()
+                print("Automatisch neu verbunden.")
+        except Exception as e:
+            print(f"Reconnect Fehler: {e}")
 #-------------bot ready-------------
 @bot.event
 async def on_ready():
