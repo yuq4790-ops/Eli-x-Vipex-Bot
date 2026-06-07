@@ -455,4 +455,5 @@ async def on_ready():
     except Exception as e:
         print(f"Voice Fehler: {e}")
 
+        print(discord.__version__)
 bot.run(TOKEN)
