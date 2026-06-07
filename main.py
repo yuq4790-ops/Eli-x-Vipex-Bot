@@ -429,20 +429,17 @@ async def on_ready():
         rotate_status.start()
 
     # Voice Channel verbinden
-    try:
-        guild = bot.get_guild(GUILD_ID)
+   try:
+    print("===== GUILDS =====")
 
-        if guild is None:
-            print("Guild nicht gefunden.")
-            return
+    for g in bot.guilds:
+        print(f"Name: {g.name}")
+        print(f"ID: {g.id}")
 
-        channel = guild.get_channel(VOICE_CHANNEL_ID)
+    print("==================")
 
-        if channel is None:
-            print("Voice Channel nicht gefunden.")
-            return
-
-        if isinstance(channel, discord.VoiceChannel):
+except Exception as e:
+    print(e)
 
             # Nicht erneut verbinden, falls bereits verbunden
             if guild.voice_client is None:
