@@ -392,8 +392,10 @@ GUILD_ID = 1440371431991935169
 async def on_voice_state_update(member, before, after):
     if member.id == bot.user.id and after.channel is None:
         try:
-            guild = bot.get_guild(GUILD_ID)
-            channel = guild.get_channel(VOICE_CHANNEL_ID)
+            guild = await bot.fetch_guild(GUILD_ID)
+            channel = bot.get_channel(VOICE_CHANNEL_ID)
+            if channel is None:
+                channel = await bot.fetch_channel(VOICE_CHANNEL_ID)
 
             if channel:
                 await channel.connect()
