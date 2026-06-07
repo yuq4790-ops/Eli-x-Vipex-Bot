@@ -405,7 +405,6 @@ async def on_ready():
         synced = await bot.tree.sync(
             guild=discord.Object(id=GUILD_ID)
         )
-
         print(f"{len(synced)} Commands synchronisiert.")
 
     except Exception as e:
@@ -420,18 +419,24 @@ async def on_ready():
         bot.loop.create_task(
             start_live_client(user)
         )
-    
+
     if not rotate_status.is_running():
         rotate_status.start()
 
+    
+    guild = bot.get_guild(GUILD_ID)
 
-        guild = bot.get_guild(GUILD_ID)
-    channel = guild.get_channel(VOICE_CHANNEL_ID)
+    if guild:
+        channel = guild.get_channel(VOICE_CHANNEL_ID)
 
-    if channel and isinstance(channel, discord.VoiceChannel):
-        try:
-            await channel.connect()
-            print(f"Verbunden mit {channel.name}")
+        if channel and isinstance(channel, discord.VoiceChannel):
+            try:
+                await channel.connect()
+                print(f"Verbunden mit {channel.name}")
 
+            except Exception as e:
+                print(f"Voice Fehler: {e}")
+
+bot.run(TOKEN)
         
 bot.run(TOKEN)
