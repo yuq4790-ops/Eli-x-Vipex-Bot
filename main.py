@@ -384,6 +384,9 @@ async def rotate_status():
 
     status_index = (status_index + 1) % len(statuses)
 
+
+#-------------CALL--------------------------------------------
+VOICE_CHANNEL_ID = 1513217517588582445
 #-------------bot ready-------------
 
 @bot.event
@@ -410,7 +413,15 @@ async def on_ready():
         bot.loop.create_task(
             start_live_client(user)
         )
+    
     if not rotate_status.is_running():
         rotate_status.start()
+     guild = bot.get_guild(GUILD_ID)
+    channel = guild.get_channel(VOICE_CHANNEL_ID)
+
+    if channel and isinstance(channel, discord.VoiceChannel):
+        try:
+            await channel.connect()
+            print(f"Verbunden mit {channel.name}")
         
 bot.run(TOKEN)
