@@ -423,12 +423,15 @@ async def on_ready():
     
     if not rotate_status.is_running():
         rotate_status.start()
-     guild = bot.get_guild(GUILD_ID)
+
+
+        guild = bot.get_guild(GUILD_ID)
     channel = guild.get_channel(VOICE_CHANNEL_ID)
 
     if channel and isinstance(channel, discord.VoiceChannel):
         try:
             await channel.connect()
             print(f"Verbunden mit {channel.name}")
+
         
 bot.run(TOKEN)
