@@ -366,7 +366,7 @@ statuses = [
     "Hosted by Yuqii",
     "Skybase System",
     "🎉Giveaway Incoming!🎉",
-    "Verify to Chatting!",
+    "Verify for Chatting!",
 ]
 
 status_index = 0
