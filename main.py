@@ -437,6 +437,5 @@ async def on_ready():
             except Exception as e:
                 print(f"Voice Fehler: {e}")
 
-bot.run(TOKEN)
         
 bot.run(TOKEN)
