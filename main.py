@@ -387,6 +387,13 @@ async def rotate_status():
 
 #-------------CALL--------------------------------------------
 VOICE_CHANNEL_ID = 1513217517588582445
+GUILD_ID = 1440371431991935169
+
+@bot.event
+async def on_voice_state_update(member, before, after):
+    if member.id == bot.user.id and after.channel is None:
+        channel = bot.get_channel(VOICE_CHANNEL_ID)
+        await channel.connect()
 #-------------bot ready-------------
 
 @bot.event
