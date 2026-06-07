@@ -387,7 +387,6 @@ async def rotate_status():
 
 #-------------CALL--------------------------------------------
 VOICE_CHANNEL_ID = 1513217517588582445
-GUILD_ID = 1440371431991935169
 
 @bot.event
 async def on_voice_state_update(member, before, after):
@@ -395,7 +394,6 @@ async def on_voice_state_update(member, before, after):
         channel = bot.get_channel(VOICE_CHANNEL_ID)
         await channel.connect()
 #-------------bot ready-------------
-
 @bot.event
 async def on_ready():
 
@@ -416,26 +414,36 @@ async def on_ready():
         check_videos.start()
 
     for user in TIKTOK_USERS:
-        bot.loop.create_task(
-            start_live_client(user)
-        )
+        bot.loop.create_task(start_live_client(user))
 
     if not rotate_status.is_running():
         rotate_status.start()
 
-    
-    guild = bot.get_guild(GUILD_ID)
+    # Voice Channel verbinden
+    try:
+        guild = bot.get_guild(GUILD_ID)
 
-    if guild:
+        if guild is None:
+            print("Guild nicht gefunden.")
+            return
+
         channel = guild.get_channel(VOICE_CHANNEL_ID)
 
-        if channel and isinstance(channel, discord.VoiceChannel):
-            try:
+        if channel is None:
+            print("Voice Channel nicht gefunden.")
+            return
+
+        if isinstance(channel, discord.VoiceChannel):
+
+            # Nicht erneut verbinden, falls bereits verbunden
+            if guild.voice_client is None:
                 await channel.connect()
                 print(f"Verbunden mit {channel.name}")
+            else:
+                print("Bot ist bereits in einem Voice Channel.")
 
-            except Exception as e:
-                print(f"Voice Fehler: {e}")
+    except Exception as e:
+        print(f"Voice Fehler: {e}")
 
-        
 bot.run(TOKEN)
+
