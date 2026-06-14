@@ -403,6 +403,19 @@ async def on_voice_state_update(member, before, after):
                 print("Automatisch neu verbunden.")
         except Exception as e:
             print(f"Reconnect Fehler: {e}")
+
+
+TARGET_USERS = [
+    1325204584829947914,
+]
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+    if message.author.id TARGET_USERS:
+        await message.reply("Halte deine fresse du Bastard")
+    await bot.procress_commands(message)
+    
 #-------------bot ready-------------
 @bot.event
 async def on_ready():
