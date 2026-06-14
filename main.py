@@ -407,14 +407,18 @@ async def on_voice_state_update(member, before, after):
 
 TARGET_USERS = [
     1325204584829947914,
+    
 ]
+
 @bot.event
 async def on_message(message):
     if message.author.bot:
         return
-    if message.author.id TARGET_USERS:
-        await message.reply("Halte deine fresse du Bastard")
-    await bot.procress_commands(message)
+
+    if message.author.id in TARGET_USERS:
+        await message.reply("Hallo, ich antworte auf deine Nachricht!")
+
+    await bot.process_commands(message)
     
 #-------------bot ready-------------
 @bot.event
