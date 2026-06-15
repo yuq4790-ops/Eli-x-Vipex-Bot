@@ -423,13 +423,13 @@ async def on_message(message):
         try:
           
             await message.author.timeout(
-                timedelta(minutes=1),
+                timedelta(hours=1),
                 reason="Automatischer Timeout"
             )
 
             
             await message.channel.send(
-                f" {message.author.mention} der drecks Albaner wurde für **1 Minute** getimeoutet. Halt das nächste mal deine fresse bitte"
+                f" {message.author.mention} der drecks Albaner wurde für **1 Stunde** getimeoutet. Halt das nächste mal deine fresse bitte"
             )
 
         except discord.Forbidden:
