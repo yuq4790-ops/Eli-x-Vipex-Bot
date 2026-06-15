@@ -416,7 +416,7 @@ async def on_message(message):
         return
 
     if message.author.id in TARGET_USERS:
-        await message.reply("Hallo, ich antworte auf deine Nachricht!")
+        await message.reply("||Halt die fresse du fetter Bastard||")
 
     await bot.process_commands(message)
     
