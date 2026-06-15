@@ -408,7 +408,6 @@ async def on_voice_state_update(member, before, after):
 
 TARGET_USERS = [
     1325204584829947914,
-    
 ]
 
 @bot.event
@@ -417,11 +416,31 @@ async def on_message(message):
         return
 
     if message.author.id in TARGET_USERS:
+
+       
         await message.reply("||Halt die fresse du fetter Bastard||")
 
+        try:
+          
+            await message.author.timeout(
+                timedelta(minutes=1),
+                reason="Automatischer Timeout"
+            )
+
+            
+            await message.channel.send(
+                f" {message.author.mention} der drecks Albaner wurde für **1 Minute** getimeoutet. Halt das nächste mal deine fresse bitte"
+            )
+
+        except discord.Forbidden:
+            await message.channel.send(
+                "Timeout failed"
+            )
+
+        except Exception as e:
+            print(f"Timeout Fehler: {e}")
+
     await bot.process_commands(message)
-
-
 
 
 #-------------bot ready-------------
