@@ -419,7 +419,90 @@ async def on_message(message):
         await message.reply("||Halt die fresse du fetter Bastard||")
 
     await bot.process_commands(message)
-    
+
+#-----------------------------------zahl erraten-------------------
+active_game = {
+    "running": False,
+    "number": None,
+    "channel_id": None
+}
+
+
+@bot.tree.command(
+    name="guess",
+    description="Starte ein Zahlenraten-Spiel"
+)
+@app_commands.describe(
+    richtige_zahl="Die Zahl, die erraten werden muss",
+    max_zahl="Maximaler Bereich"
+)
+async def guess(
+    interaction: discord.Interaction,
+    richtige_zahl: int,
+    max_zahl: int
+):
+
+    if active_game["running"]:
+        await interaction.response.send_message(
+            "Es läuft bereits ein Spiel.",
+            ephemeral=True
+        )
+        return
+
+    if richtige_zahl < 1 or richtige_zahl > max_zahl:
+        await interaction.response.send_message(
+            "Die richtige Zahl muss zwischen 1 und der Maximalzahl liegen.",
+            ephemeral=True
+        )
+        return
+
+    active_game["running"] = True
+    active_game["number"] = richtige_zahl
+    active_game["channel_id"] = interaction.channel.id
+
+    # Nur du siehst das
+    await interaction.response.send_message(
+        f"Spiel gestartet!\n"
+        f"Die richtige Zahl ist: **{richtige_zahl}**",
+        ephemeral=True
+    )
+
+    # Öffentliche Nachricht
+    await interaction.channel.send(
+        f"**Zahlenraten gestartet!**\n"
+        f"Erratet eine Zahl zwischen **1** und **{max_zahl}**!"
+    )
+
+
+@bot.event
+async def on_message(message):
+    if message.author.bot:
+        return
+
+    if active_game["running"] and message.channel.id == active_game["channel_id"]:
+
+        try:
+            zahl = int(message.content)
+
+            if zahl == active_game["number"]:
+                active_game["running"] = False
+
+                embed = discord.Embed(
+                    title=" GEWINNER ",
+                    description=f"{message.author.mention} hat die richtige Zahl erraten!",
+                    color=discord.Color.gold()
+                )
+
+                await message.channel.send(
+                    f"{message.author.mention} HAT GEWONNEN! ",
+                    embed=embed
+                )
+
+        except ValueError:
+            pass
+
+    await bot.process_commands(message)
+
 #-------------bot ready-------------
 @bot.event
 async def on_ready():
