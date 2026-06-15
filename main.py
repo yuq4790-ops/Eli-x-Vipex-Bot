@@ -6,6 +6,7 @@ from TikTokLive import TikTokLiveClient
 from TikTokLive.events import ConnectEvent
 import asyncio
 from datetime import timedelta
+from discord import app_commands
 
 
 TOKEN = os.getenv("TOKEN")
