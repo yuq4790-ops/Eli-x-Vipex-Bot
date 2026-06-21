@@ -110,7 +110,7 @@ ALLOWED_USERS = {
 }
 
 @bot.tree.command(name="ban", description="Banning a User")
-@app_command.describe(
+@app_commands.describe(
     user="User you want to ban",
     grund="Reason for ban"
 )
