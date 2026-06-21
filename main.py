@@ -19,9 +19,6 @@ TIKTOK_USERS = [
     "vipexak"
 ]
 
-ALLOWED_USERS = {
-    1280038439202590802
-}
 
 PING_ROLE = "@everyone"
 
@@ -108,62 +105,33 @@ async def start_live_client(username):
 
 
 # MODERATION 
+ALLOWED_USERS = { 
+    1280038439202590802
+}
+
+@bot.tree.command(name="ban", description="Banning a User")
+@app_command.describe(
+    user="User you want to ban",
+    grund="Reason for ban
+)
+async def ban(
+    interaction: discord.Interaction,
+    user: discord.Member,
+    grund: str = "No Reason"
 
 
-@bot.command()
-@is_allowed()
-async def ban(ctx, member: discord.Member, *, reason="Kein Grund angegeben"):
-
-    await member.ban(reason=reason)
-
-    await ctx.send(
-        f"{member.mention} wurde gebannt.\nGrund: {reason}"
-    )
-
-
-@bot.command()
-@is_allowed()
-async def kick(ctx, member: discord.Member, *, reason="Kein Grund angegeben"):
-
-    await member.kick(reason=reason)
-
-    await ctx.send(
-        f"{member.mention} wurde gekickt.\nGrund: {reason}"
-    )
+):
+    if interaction.user.id nit on ALLOWED_USERS:
+        await interaction.response.send_message(
+            "Not Allowed",
+            ephemeral=True
+        )
+        return
+                                            
+    
 
 
-@bot.command()
-@is_allowed()
-async def to(ctx, member: discord.Member, minutes: int, *, reason="Kein Grund angegeben"):
 
-    duration = timedelta(minutes=minutes)
-
-    await member.timeout(duration, reason=reason)
-
-    await ctx.send(
-        f"{member.mention} wurde für {minutes} Minuten getimeoutet.\nGrund: {reason}"
-    )
-
-
-@bot.command(name="rto")
-@is_allowed()
-async def remove_timeout(ctx, member: discord.Member):
-
-    await member.timeout(None)
-
-    await ctx.send(
-        f"Timeout von {member.mention} wurde entfernt."
-    )
-
-
-@bot.event
-async def on_command_error(ctx, error):
-
-    if isinstance(error, commands.CheckFailure):
-        await ctx.send("Du darfst diesen Command nicht benutzen.")
-
-    else:
-        print(error)
 
 
 @bot.command()
