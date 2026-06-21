@@ -112,7 +112,7 @@ ALLOWED_USERS = {
 @bot.tree.command(name="ban", description="Banning a User")
 @app_command.describe(
     user="User you want to ban",
-    grund="Reason for ban
+    grund="Reason for ban"
 )
 async def ban(
     interaction: discord.Interaction,
