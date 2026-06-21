@@ -121,7 +121,7 @@ async def ban(
 
 
 ):
-    if interaction.user.id not on ALLOWED_USERS:
+    if interaction.user.id not in ALLOWED_USERS:
         await interaction.response.send_message(
             "Not Allowed",
             ephemeral=True
