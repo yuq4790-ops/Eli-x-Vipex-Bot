@@ -1,1 +1,1 @@
-worker: python main.py
+Amora: python main.py
