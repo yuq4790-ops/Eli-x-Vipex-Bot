@@ -429,7 +429,7 @@ async def on_webhooks_update(channel: discord.abc.GuildChannel):
                 print("No perms to delete Webhook.")
 
 # create webhook
-from discord import app_commands
+
 
 @bot.tree.command(
     name="container",
