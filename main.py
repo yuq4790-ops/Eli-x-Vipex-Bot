@@ -190,7 +190,7 @@ async def on_member_join(member):
 
         discord.ui.TextDisplay(
             "# Willkommen\n"
-            f"**Hey {interaction.user.mention}. Schön das du hier bist!**\n"
+            f"**Hey {member.mention}. Schön das du hier bist!**\n"
         ),
 
         discord.ui.Separator(),
@@ -237,11 +237,7 @@ async def on_member_join(member):
     view = discord.ui.LayoutView()
     view.add_item(container)
 
-    await interaction.response.send_message(
-        view=view,
-        ephemeral=False
-    )
-
+    await channel.send(view=view)
 
 #----------------verify panel-------
 
