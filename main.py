@@ -180,63 +180,67 @@ async def lock(ctx, channel: discord.TextChannel = None, *, note=None):
 
 WELCOME_CHANNEL_ID = 1470008906934648954
 
-class WelcomeView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=None)
-
-        self.add_item(
-            discord.ui.Button(
-                label="Zur Verifizierung!",
-                style=discord.ButtonStyle.link,
-                url="https://discord.gg/FKjSYygj2f"
-            )
-        )
-
-        self.add_item(
-            discord.ui.Button(
-                label="Vipex Tiktok",
-                style=discord.ButtonStyle.link,
-                url="https://www.tiktok.com/@vipexak"
-            )
-        )
-
-        self.add_item(
-            discord.ui.Button(
-                label="Elixo Tiktok",
-                style=discord.ButtonStyle.link,
-                url="https://www.tiktok.com/@eli97xo"
-            )
-        )
 
 
 @bot.event
 async def on_member_join(member):
     channel = bot.get_channel(WELCOME_CHANNEL_ID)
+    
+    container = discord.ui.Container(
 
-    embed = discord.Embed(
-        title="**Willkommen!**",
-        description=(
-            f"**Hey {member.mention}. Schön das du hier bist!**\n\n"
-            "- **Info:**\n"
-            "> Mit der Verifizierung stimmst du unserem Regelwerk zu.\n"
-            "> Du kannst dieses jederzeit unter <#1440371432877199397> einsehen.\n\n"
-            "- **Verifizierung:**\n"
-            "> Bevor du richtig loslegen kannst, musst du dich noch freischalten,\n"
-            "> um Zugriff auf alle Kanäle zu erhalten."
+        discord.ui.TextDisplay(
+            "# Willkommen\n"
+            f"**Hey {interaction.user.mention}. Schön das du hier bist!**\n"
         ),
-        color=discord.Color.blurple()
+
+        discord.ui.Separator(),
+
+        discord.ui.Section(
+            discord.ui.TextDisplay(
+
+                "- **Info:**\n"
+                "> Mit der Verifizierung stimmst du unserem Regelwerk zu.\n"
+                "> Du kannst dieses jederzeit unter <#1440371432877199397> einsehen.\n\n"
+                "- **Verifizierung:**\n"
+                "> Bevor du richtig loslegen kannst, musst du dich noch freischalten,\n"
+                "> um Zugriff auf alle Kanäle zu erhalten."
+            ),
+            accessory=discord.ui.Thumbnail(
+                media="https://images-ext-1.discordapp.net/external/8JT06RtO_W4n7L4NoSclCNQtpFvMoYzWmsUdkoZRKNk/%3Fsize%3D1024/https/cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?format=webp"
+            )
+        ),
+
+        discord.ui.Separator(),
+
+        discord.ui.ActionRow(
+            discord.ui.Button(
+                label="Vipex TikTok",
+                style=discord.ButtonStyle.link,
+                url="https://discord.com/channels/DEIN_SERVER/CHANNEL_ID"
+            ),
+            discord.ui.Button(
+                label="ELIXO TikTok",
+                style=discord.ButtonStyle.link,
+                url="https://example.com"
+            ),
+            discord.ui.Button(
+                label="Zur Verifizierung",
+                style=discord.ButtonStyle.link,
+                url="https://discord.com/channels/DEIN_SERVER/TICKET_CHANNEL"
+            )
+        )
     )
 
-    embed.set_image(
-        url="https://cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?size=1024"
-    )
 
-    await channel.send(
-        content=f"Willkommen {member.mention}!",
-        embed=embed,
-        view=WelcomeView()
-    )
 
+
+    view = discord.ui.LayoutView()
+    view.add_item(container)
+
+    await interaction.response.send_message(
+        view=view,
+        ephemeral=False
+    )
 
 
 #----------------verify panel-------
