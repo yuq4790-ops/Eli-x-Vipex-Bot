@@ -16,7 +16,7 @@ POST_CHANNEL_ID = 1440717598831411382
 
 TIKTOK_USERS = [
     "eli97xo",
-    "vipexa"
+    "vipexak"
 ]
 
 
@@ -428,42 +428,7 @@ async def on_webhooks_update(channel: discord.abc.GuildChannel):
             except discord.Forbidden:
                 print("No perms to delete Webhook.")
 
-# create webhook
 
-
-@bot.tree.command(
-    name="container",
-    description="Sendet eine Nachricht im Container-Design."
-)
-@app_commands.checks.has_permissions(administrator=True)
-@app_commands.describe(
-    titel="Überschrift",
-    text="Nachricht"
-)
-async def container(
-    interaction: discord.Interaction,
-    titel: str,
-    text: str
-):
-
-    container = discord.ui.Container(
-
-        discord.ui.TextDisplay(
-            f"# {titel}\n"
-            f"{text}"
-        ),
-
-        discord.ui.Separator(),
-
-        discord.ui.TextDisplay(
-            f"-# Gesendet von {interaction.user.mention}"
-        )
-    )
-
-    view = discord.ui.LayoutView()
-    view.add_item(container)
-
-    await interaction.response.send_message(view=view)
 #-------------bot ready-------------
 @bot.event
 async def on_ready():
