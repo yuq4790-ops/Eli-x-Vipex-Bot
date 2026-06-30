@@ -16,7 +16,7 @@ POST_CHANNEL_ID = 1440717598831411382
 
 TIKTOK_USERS = [
     "eli97xo",
-    "vipexak"
+    "vipexa"
 ]
 
 
@@ -180,21 +180,16 @@ async def lock(ctx, channel: discord.TextChannel = None, *, note=None):
 
 WELCOME_CHANNEL_ID = 1470008906934648954
 
-
-
 @bot.event
 async def on_member_join(member):
     channel = bot.get_channel(WELCOME_CHANNEL_ID)
-    
     container = discord.ui.Container(
-
+        
         discord.ui.TextDisplay(
-            "# Willkommen\n"
+            "# Willkommen!\n"
             f"**Hey {member.mention}. Schön das du hier bist!**\n"
         ),
-
         discord.ui.Separator(),
-
         discord.ui.Section(
             discord.ui.TextDisplay(
 
@@ -216,27 +211,23 @@ async def on_member_join(member):
             discord.ui.Button(
                 label="Vipex TikTok",
                 style=discord.ButtonStyle.link,
-                url="https://discord.com/channels/DEIN_SERVER/CHANNEL_ID"
+                url="https://www.tiktok.com/@vipexak"
             ),
             discord.ui.Button(
-                label="ELIXO TikTok",
+                label="Elixo TikTok",
                 style=discord.ButtonStyle.link,
-                url="https://example.com"
+                url="https://www.tiktok.com/@eli97xo"
             ),
             discord.ui.Button(
                 label="Zur Verifizierung",
                 style=discord.ButtonStyle.link,
-                url="https://discord.com/channels/DEIN_SERVER/TICKET_CHANNEL"
+                url="https://discord.gg/FKjSYygj2f"
             )
         )
     )
 
-
-
-
     view = discord.ui.LayoutView()
     view.add_item(container)
-
     await channel.send(view=view)
 
 #----------------verify panel-------
@@ -410,7 +401,69 @@ async def on_message(message):
 
     await bot.process_commands(message)
 
+# -------anti webhook
+TRUSTED_ROLE_ID = 1440421346810134801 
 
+@bot.event
+async def on_webhooks_update(channel: discord.abc.GuildChannel):
+    guild = channel.guild
+
+    webhooks = await guild.webhooks()
+
+    for webhook in webhooks:
+        if webhook.channel_id != channel.id:
+            continue
+
+        if webhook.user is None:
+            continue
+
+        member = guild.get_member(webhook.user.id)
+        if member is None:
+            continue
+
+        if all(role.id != TRUSTED_ROLE_ID for role in member.roles):
+            try:
+                await webhook.delete(reason="Webhook forbidden")
+                print(f"Webhook from {member} deleted.")
+            except discord.Forbidden:
+                print("No perms to delete Webhook.")
+
+# create webhook
+from discord import app_commands
+
+@bot.tree.command(
+    name="container",
+    description="Sendet eine Nachricht im Container-Design."
+)
+@app_commands.checks.has_permissions(administrator=True)
+@app_commands.describe(
+    titel="Überschrift",
+    text="Nachricht"
+)
+async def container(
+    interaction: discord.Interaction,
+    titel: str,
+    text: str
+):
+
+    container = discord.ui.Container(
+
+        discord.ui.TextDisplay(
+            f"# {titel}\n"
+            f"{text}"
+        ),
+
+        discord.ui.Separator(),
+
+        discord.ui.TextDisplay(
+            f"-# Gesendet von {interaction.user.mention}"
+        )
+    )
+
+    view = discord.ui.LayoutView()
+    view.add_item(container)
+
+    await interaction.response.send_message(view=view)
 #-------------bot ready-------------
 @bot.event
 async def on_ready():
