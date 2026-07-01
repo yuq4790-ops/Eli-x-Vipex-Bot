@@ -461,7 +461,7 @@ async def on_webhooks_update(channel: discord.abc.GuildChannel):
 @bot.event
 async def on_ready():
 
-    bot.add_view(VerifyPanelView())
+    bot.add_view(VerifyPanel())
 
     try:
         synced = await bot.tree.sync(
