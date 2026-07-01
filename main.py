@@ -288,7 +288,7 @@ class InfoButton(discord.ui.Button):
         )
 
 
-class VerifyPanelView(discord.ui.LayoutView):
+class VerifyPanel(discord.ui.LayoutView):
     def __init__(self):
         super().__init__(timeout=None)
 
