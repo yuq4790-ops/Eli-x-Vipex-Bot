@@ -232,47 +232,37 @@ async def on_member_join(member):
 
 #----------------verify panel-------
 
-GUILD_ID = 1440371431991935169
+GUILD_ID = 1480560931372142736
+VERIFY_ROLE_ID = 1512586140081852466
+REMOVE_ROLE_ID = 1521939825966711035
 
-VERIFY_ROLE_ID = 1441758416292024445     
-REMOVE_ROLE_ID = 1512604669426536549      
 
-
-class VerifyPanelView(discord.ui.View):
+class VerifyButton(discord.ui.Button):
     def __init__(self):
-        super().__init__(timeout=None)
+        super().__init__(
+            label="Verifizieren",
+            style=discord.ButtonStyle.success,
+            custom_id="verify_button"
+        )
 
-    @discord.ui.button(
-        label="Verifizieren",
-        style=discord.ButtonStyle.success,
-        custom_id="verify_button"
-    )
-    async def verify_button(
-        self,
-        interaction: discord.Interaction,
-        button: discord.ui.Button
-    ):
+    async def callback(self, interaction: discord.Interaction):
         verify_role = interaction.guild.get_role(VERIFY_ROLE_ID)
         remove_role = interaction.guild.get_role(REMOVE_ROLE_ID)
 
         if verify_role is None:
-            await interaction.response.send_message(
+            return await interaction.response.send_message(
                 "Verifizierungsrolle nicht gefunden.",
                 ephemeral=True
             )
-            return
 
         if verify_role in interaction.user.roles:
-            await interaction.response.send_message(
+            return await interaction.response.send_message(
                 "Du bist bereits verifiziert.",
                 ephemeral=True
             )
-            return
 
-        
         await interaction.user.add_roles(verify_role)
 
-        
         if remove_role and remove_role in interaction.user.roles:
             await interaction.user.remove_roles(remove_role)
 
@@ -280,42 +270,80 @@ class VerifyPanelView(discord.ui.View):
             "Du wurdest erfolgreich verifiziert!",
             ephemeral=True
         )
+class InfoButton(discord.ui.Button):
+    def __init__(self):
+        super().__init__(
+            label="Weitere Infos",
+            style=discord.ButtonStyle.secondary,
+
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        await interaction.response.send_message(
+            "**Weitere Informationen**\n\n"
+            "• Wir verlangen niemals auf fremde Links zu klicken.\n"
+            "• Der Verify Button verlinkt dich zu keinem Link.\n"
+            "• Die Verifzierung ist dafür da Fakeaccounts abzuwehren.",
+            ephemeral=True
+        )
+
+
+class VerifyPanel(discord.ui.LayoutView):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+        button = VerifyButton()
+        info_button = InfoButton()
+        container = discord.ui.Container()
+
+
+
+        container.add_item(
+            discord.ui.TextDisplay(
+                "# Verifizierung\n"
+                f"**Informationen**\n"
+            )
+        )
+        container.add_item(discord.ui.Separator())
+
+        container.add_item(
+            discord.ui.Section(
+                discord.ui.TextDisplay(
+                    "> Mit der Verifizierung stimmst du unserem\n"
+                    "> <#1440371432877199397> zu.\n\n"
+                    "> Nach erfolgreicher Verifizierung erhältst du\n"
+                    "> Zugriff auf alle Kanäle."
+                ),
+                accessory=discord.ui.Thumbnail(
+                    media="https://cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?size=1024"
+                )
+            )
+        )
+
+        container.add_item(discord.ui.Separator())
+
+        verify_button = VerifyButton()
+        info_button = InfoButton()
+
+        row = discord.ui.ActionRow()
+        row.add_item(verify_button)
+        row.add_item(info_button)
+
+        container.add_item(row)
+
+        self.add_item(container)
 
 
 @bot.tree.command(
     name="verifypanel",
-    description="Erstellt das Verifizierungspanel",
+    description="Erstellt das Verify Panel",
     guild=discord.Object(id=GUILD_ID)
 )
 async def verifypanel(interaction: discord.Interaction):
-
-    embed = discord.Embed(
-        title="Verifizierung",
-        color=discord.Color.blurple()
-    )
-
-    embed.add_field(
-        name="Informationen",
-        value=(
-            "> Mit der Verifizierung stimmst du unserem\n"
-            "> <#1440371432877199397> zu.\n\n"
-            "> Nach erfolgreicher Verifizierung erhältst du\n"
-            "> Zugriff auf alle Kanäle."
-        ),
-        inline=False
-    )
-
-    embed.set_image(
-        url="https://cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?size=1024"
-    )
-
-    await interaction.channel.send(
-        embed=embed,
-        view=VerifyPanelView()
-    )
+    await interaction.channel.send(view=VerifyPanel())
 
     await interaction.response.send_message(
-        "Verify Panel erstellt.",
+        "✅ Verify Panel erstellt.",
         ephemeral=True
     )
 
