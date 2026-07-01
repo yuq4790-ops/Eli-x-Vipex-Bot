@@ -232,9 +232,9 @@ async def on_member_join(member):
 
 #----------------verify panel-------
 
-GUILD_ID = 1480560931372142736
-VERIFY_ROLE_ID = 1512586140081852466
-REMOVE_ROLE_ID = 1521939825966711035
+GUILD_ID = 1440371431991935169
+VERIFY_ROLE_ID = 1441758416292024445
+REMOVE_ROLE_ID = 1512604669426536549
 
 
 class VerifyButton(discord.ui.Button):
@@ -343,7 +343,7 @@ async def verifypanel(interaction: discord.Interaction):
     await interaction.channel.send(view=VerifyPanel())
 
     await interaction.response.send_message(
-        "✅ Verify Panel erstellt.",
+        "Verify Panel erstellt.",
         ephemeral=True
     )
 
