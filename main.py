@@ -7,6 +7,7 @@ from TikTokLive.events import ConnectEvent
 import asyncio
 from datetime import timedelta
 from discord import app_commands
+from TikTokLive.client.errors import UserOfflineError
 
 
 TOKEN = os.getenv("TOKEN")
