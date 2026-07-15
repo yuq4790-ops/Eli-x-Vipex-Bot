@@ -62,15 +62,14 @@ async def start_live_client(username):
             )
 
         try:
+            print(f"Prüfe {username}...")
             await client.start()
 
         except Exception as e:
-    print(f"Live Error {username}: {type(e).__name__}: {e}")
+            print(f"Live Error {username}: {type(e).__name__}: {e}")
 
-    if "offline" in str(e).lower():
-        live_sent[username] = False
-        except Exception as e:
-            print(f"Live Error {username}: {e}")
+            if "offline" in str(e).lower():
+                live_sent[username] = False
 
         finally:
             try:
