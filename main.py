@@ -9,7 +9,6 @@ from datetime import timedelta
 from discord import app_commands
 from TikTokLive.client.errors import UserOfflineError
 
-print(TikTokLive.__version__)
 
 TOKEN = os.getenv("TOKEN")
 
@@ -456,6 +455,7 @@ async def on_ready():
         print(f"Sync Fehler: {e}")
 
     print(f"Logged in als {bot.user}")
+    print(TikTokLive.__version__)
 
     # TikTok-Tasks nur EINMAL starten
     if not live_tasks_started:
