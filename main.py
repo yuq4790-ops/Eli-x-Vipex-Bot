@@ -47,34 +47,36 @@ async def start_live_client(username):
     while True:
         client = TikTokLiveClient(unique_id=username)
 
-        @client.on(ConnectEvent)
-        async def on_connect(event):
-            live_channel = bot.get_channel(LIVE_CHANNEL_ID)
-
-            if live_sent.get(username, False):
-                return
-
-            live_sent[username] = True
-
-            await live_channel.send(
-                f"{PING_ROLE}\n"
-                f"🔴 **{username}** ist jetzt LIVE!\n"
-                f"https://www.tiktok.com/@{username}/live"
-            )
-
         try:
             print(f"Prüfe {username}...")
-            await client.start()
+
+            # Verbindung herstellen
+            await client.start(fetch_room_info=True)
+
+            # Wenn wir hier sind, ist der User tatsächlich live
+            if not live_sent.get(username, False):
+                live_sent[username] = True
+
+                live_channel = bot.get_channel(LIVE_CHANNEL_ID)
+
+                await live_channel.send(
+                    f"{PING_ROLE}\n"
+                    f"🔴 **{username}** ist jetzt LIVE!\n"
+                    f"https://www.tiktok.com/@{username}/live"
+                )
+
+            # Warten bis der Stream endet
+            await client.run()
 
         except UserOfflineError:
+            # Nur zurücksetzen, wenn der User wirklich offline ist
+            if live_sent.get(username, False):
+                print(f"{username} ist nicht mehr live.")
+
             live_sent[username] = False
-            print(f"{username} ist offline.")
 
         except Exception as e:
-            print(f"Live Error {username}: {type(e).__name__}: {e}")
-
-            if "offline" in str(e).lower():
-                live_sent[username] = False
+            print(f"{username}: {type(e).__name__}: {e}")
 
         finally:
             try:
@@ -82,7 +84,7 @@ async def start_live_client(username):
             except:
                 pass
 
-        await asyncio.sleep(10)
+        await asyncio.sleep(30)
 
 
 
