@@ -44,45 +44,34 @@ def is_allowed():
 
 
 async def start_live_client(username):
+    client = TikTokLiveClient(unique_id=username)
+
     while True:
-        client = TikTokLiveClient(unique_id=username)
-
         try:
-            print(f"Prüfe {username}...")
+            is_live = await client.is_live()
 
-            # Verbindung herstellen
-            await client.start(fetch_room_info=True)
+            if is_live:
+                if not live_sent.get(username, False):
+                    live_sent[username] = True
 
-            # Wenn wir hier sind, ist der User tatsächlich live
-            if not live_sent.get(username, False):
-                live_sent[username] = True
+                    channel = bot.get_channel(LIVE_CHANNEL_ID)
 
-                live_channel = bot.get_channel(LIVE_CHANNEL_ID)
+                    await channel.send(
+                        f"{PING_ROLE}\n"
+                        f"🔴 **{username}** ist jetzt LIVE!\n"
+                        f"https://www.tiktok.com/@{username}/live"
+                    )
 
-                await live_channel.send(
-                    f"{PING_ROLE}\n"
-                    f"🔴 **{username}** ist jetzt LIVE!\n"
-                    f"https://www.tiktok.com/@{username}/live"
-                )
+                    print(f"{username} ist LIVE")
 
-            # Warten bis der Stream endet
-            await client.run()
+            else:
+                if live_sent.get(username, False):
+                    print(f"{username} ist offline")
 
-        except UserOfflineError:
-            # Nur zurücksetzen, wenn der User wirklich offline ist
-            if live_sent.get(username, False):
-                print(f"{username} ist nicht mehr live.")
-
-            live_sent[username] = False
+                live_sent[username] = False
 
         except Exception as e:
-            print(f"{username}: {type(e).__name__}: {e}")
-
-        finally:
-            try:
-                await client.disconnect()
-            except:
-                pass
+            print(f"{username}: {e}")
 
         await asyncio.sleep(30)
 
