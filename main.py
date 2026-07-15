@@ -490,3 +490,6 @@ async def on_ready():
 
     except Exception as e:
         print(f"Voice Fehler: {e}")
+
+if __name__ == "__main__":
+    bot.run(TOKEN)
