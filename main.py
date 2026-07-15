@@ -448,8 +448,6 @@ async def on_ready():
 
     print(f"Logged in als {bot.user}")
 
-    if not check_videos.is_running():
-        check_videos.start()
 
     for user in TIKTOK_USERS:
         bot.loop.create_task(start_live_client(user))
