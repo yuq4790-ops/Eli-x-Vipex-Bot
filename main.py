@@ -31,7 +31,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="$", intents=intents)
 
 live_sent = {}
-
+live_tasks_started = False
 
 def is_allowed():
     async def predicate(ctx):
@@ -437,6 +437,7 @@ async def on_webhooks_update(channel: discord.abc.GuildChannel):
 #-------------bot ready-------------
 @bot.event
 async def on_ready():
+    global live_tasks_started
 
     bot.add_view(VerifyPanel())
 
@@ -445,15 +446,18 @@ async def on_ready():
             guild=discord.Object(id=GUILD_ID)
         )
         print(f"{len(synced)} Commands synchronisiert.")
-
     except Exception as e:
         print(f"Sync Fehler: {e}")
 
     print(f"Logged in als {bot.user}")
 
+    # TikTok-Tasks nur EINMAL starten
+    if not live_tasks_started:
+        for user in TIKTOK_USERS:
+            print(f"Starte TikTok-Task für {user}")
+            asyncio.create_task(start_live_client(user))
 
-    for user in TIKTOK_USERS:
-        bot.loop.create_task(start_live_client(user))
+        live_tasks_started = True
 
     if not rotate_status.is_running():
         rotate_status.start()
@@ -473,18 +477,16 @@ async def on_ready():
             return
 
         if isinstance(channel, discord.VoiceChannel):
+            vc = guild.voice_client
 
-            # Nicht erneut verbinden, falls bereits verbunden
-            if guild.voice_client is None:
+            if vc is None:
                 await channel.connect()
                 print(f"Verbunden mit {channel.name}")
+            elif vc.channel.id != VOICE_CHANNEL_ID:
+                await vc.move_to(channel)
+                print(f"In {channel.name} verschoben.")
             else:
-                print("Bot ist bereits in einem Voice Channel.")
+                print("Bot ist bereits im richtigen Voice Channel.")
 
     except Exception as e:
         print(f"Voice Fehler: {e}")
-
-        print(discord.__version__)
-       
-        print(f"Live-Checker gestartet: {username}")
-bot.run(TOKEN)
