@@ -12,7 +12,7 @@ from discord import app_commands
 TOKEN = os.getenv("TOKEN")
 
 LIVE_CHANNEL_ID = 1442092783690055803
-POST_CHANNEL_ID = 1440717598831411382
+
 
 TIKTOK_USERS = [
     "eli97xo",
@@ -29,7 +29,6 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="$", intents=intents)
 
-last_videos = {}
 live_sent = {}
 
 
@@ -50,7 +49,7 @@ async def start_live_client(username):
         async def on_connect(event):
             live_channel = bot.get_channel(LIVE_CHANNEL_ID)
 
-            if live_sent.get(username):
+            if live_sent.get(username, False):
                 return
 
             live_sent[username] = True
@@ -62,8 +61,12 @@ async def start_live_client(username):
             )
 
         try:
-            live_sent[username] = False
             await client.start()
+
+        except UserOfflineError:
+            # Nur zurücksetzen, wenn der Stream wirklich offline ist
+            live_sent[username] = False
+            print(f"{username} ist offline.")
 
         except Exception as e:
             print(f"Live Error {username}: {e}")
