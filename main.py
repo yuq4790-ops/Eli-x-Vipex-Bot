@@ -64,11 +64,11 @@ async def start_live_client(username):
         try:
             await client.start()
 
-        except UserOfflineError:
-            # Nur zurücksetzen, wenn der Stream wirklich offline ist
-            live_sent[username] = False
-            print(f"{username} ist offline.")
+        except Exception as e:
+    print(f"Live Error {username}: {type(e).__name__}: {e}")
 
+    if "offline" in str(e).lower():
+        live_sent[username] = False
         except Exception as e:
             print(f"Live Error {username}: {e}")
 
@@ -486,4 +486,6 @@ async def on_ready():
         print(f"Voice Fehler: {e}")
 
         print(discord.__version__)
+       
+        print(f"Live-Checker gestartet: {username}")
 bot.run(TOKEN)
