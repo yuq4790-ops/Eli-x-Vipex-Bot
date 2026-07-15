@@ -40,66 +40,39 @@ def is_allowed():
     return commands.check(predicate)
 
 
-def get_latest_video(username):
-    return None
-
-
-@tasks.loop(minutes=1)
-async def check_videos():
-
-    channel = bot.get_channel(POST_CHANNEL_ID)
-
-    for username in TIKTOK_USERS:
-
-        latest_video = get_latest_video(username)
-
-        if latest_video is None:
-            continue
-
-        if username not in last_videos:
-            last_videos[username] = latest_video
-            continue
-
-        if latest_video != last_videos[username]:
-
-            last_videos[username] = latest_video
-
-            video_url = f"https://www.tiktok.com/@{username}/video/{latest_video}"
-
-            await channel.send(
-                f"{PING_ROLE}\n"
-                f"📹 Neuer TikTok Post von **{username}**\n"
-                f"{video_url}"
-            )
 
 
 async def start_live_client(username):
-
-    client = TikTokLiveClient(unique_id=username)
-
-    @client.on(ConnectEvent)
-    async def on_connect(event: ConnectEvent):
-
-        live_channel = bot.get_channel(LIVE_CHANNEL_ID)
-
-        if live_sent.get(username):
-            return
-
-        live_sent[username] = True
-
-        await live_channel.send(
-            f"{PING_ROLE}\n"
-            f"🔴 **{username}** ist jetzt LIVE!\n"
-            f"https://www.tiktok.com/@{username}/live"
-        )
-
     while True:
+        client = TikTokLiveClient(unique_id=username)
+
+        @client.on(ConnectEvent)
+        async def on_connect(event):
+            live_channel = bot.get_channel(LIVE_CHANNEL_ID)
+
+            if live_sent.get(username):
+                return
+
+            live_sent[username] = True
+
+            await live_channel.send(
+                f"{PING_ROLE}\n"
+                f"🔴 **{username}** ist jetzt LIVE!\n"
+                f"https://www.tiktok.com/@{username}/live"
+            )
+
         try:
             live_sent[username] = False
             await client.start()
 
         except Exception as e:
             print(f"Live Error {username}: {e}")
+
+        finally:
+            try:
+                await client.disconnect()
+            except:
+                pass
 
         await asyncio.sleep(10)
 
