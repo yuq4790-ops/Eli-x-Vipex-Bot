@@ -23,7 +23,7 @@ TIKTOK_USERS = [
 ]
 
 
-PING_ROLE = "everyone"
+PING_ROLE = "@everyone"
 
 intents = discord.Intents.default()
 intents.members = True
