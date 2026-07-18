@@ -17,7 +17,7 @@ LIVE_CHANNEL_ID = 1442092783690055803
 
 
 TIKTOK_USERS = [
-    "eli97xoo000",
+    "eli97xo",
     "vipexak"
    
 ]
