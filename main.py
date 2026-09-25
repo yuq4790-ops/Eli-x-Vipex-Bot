@@ -348,6 +348,23 @@ async def rotate_status():
 
 
 #-------------CALL--------------------------------------------
+@bot.event
+async def on_ready():
+    activity = discord.Game(name="Niggas")
+    await bot.change_presence(
+        status=discord.Status.online,
+        activity=activity
+    )
+
+
+
+
+
+
+
+
+
+
 VOICE_CHANNEL_ID = 1513217517588582445
 
 
