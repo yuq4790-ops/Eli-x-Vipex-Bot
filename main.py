@@ -352,7 +352,7 @@ async def rotate_status():
 async def on_ready():
     activity = discord.Game(name="Niggas")
     await bot.change_presence(
-        status=discord.Status.online,
+        status=discord.Status.streaming,
         activity=activity
     )
 
