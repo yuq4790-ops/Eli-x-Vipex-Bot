@@ -338,7 +338,7 @@ async def rotate_status():
     global status_index
 
     activity = discord.Activity(
-        type=discord.ActivityType.listening,
+        type=discord.ActivityType.streaming,
         name=statuses[status_index]
     )
 
