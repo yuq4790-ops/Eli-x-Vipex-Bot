@@ -251,7 +251,7 @@ async def on_ready():
 
     # Permanenter Streaming-Status
     activity = discord.Streaming(
-        name="Lunara Luxury",
+        name="Aslans Assistant",
         url="https://www.twitch.tv/discord"
     )
 
