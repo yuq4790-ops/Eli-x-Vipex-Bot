@@ -188,28 +188,7 @@ class TicketBot(commands.Bot):
 
 #-------------Activity--------------------
 
-statuses = [
-    "discord.gg/aslans",
-    "Hosted by Yuqii",
-    "Aslans Assistant",
-    "Giveaway Incoming!",
-    "Verify for Chatting!",
-]
 
-status_index = 0
-
-@tasks.loop(seconds=2)
-async def rotate_status():
-    global status_index
-
-    activity = discord.Activity(
-        type=discord.ActivityType.streaming,
-        name=statuses[status_index]
-    )
-
-    await bot.change_presence(activity=activity)
-
-    status_index = (status_index + 1) % len(statuses)
 
 
 #-------------CALL--------------------------------------------
