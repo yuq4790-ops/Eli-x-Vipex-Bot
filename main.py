@@ -13,11 +13,11 @@ import TikTokLive
 
 TOKEN = os.getenv("TOKEN")
 
-LIVE_CHANNEL_ID = 1442092783690055803
+LIVE_CHANNEL_ID = 1564335456718688427
 
 
 TIKTOK_USERS = [
-    "eli97xo",
+    "calli_eh",
     "vipexak"
    
 ]
@@ -75,39 +75,6 @@ async def start_live_client(username):
 
         await asyncio.sleep(30)
 
-
-
-
-# MODERATION 
-ALLOWED_USERS = { 
-    1280038439202590802
-}
-
-@bot.tree.command(name="ban", description="Banning a User")
-@app_commands.describe(
-    user="User you want to ban",
-    grund="Reason for ban"
-)
-async def ban(
-    interaction: discord.Interaction,
-    user: discord.Member,
-    grund: str = "No Reason"
-
-
-):
-    if interaction.user.id not in ALLOWED_USERS:
-        await interaction.response.send_message(
-            "Not Allowed",
-            ephemeral=True
-        )
-        return
-                                            
-    
-
-
-
-
-
 @bot.command()
 @commands.has_permissions(manage_channels=True)
 async def lock(ctx, channel: discord.TextChannel = None, *, note=None):
@@ -152,7 +119,7 @@ async def lock(ctx, channel: discord.TextChannel = None, *, note=None):
        #-------------welcome panel-----------
 
 
-WELCOME_CHANNEL_ID = 1470008906934648954
+WELCOME_CHANNEL_ID = 1564334940408258683
 
 @bot.event
 async def on_member_join(member):
@@ -169,13 +136,13 @@ async def on_member_join(member):
 
                 "- **Info:**\n"
                 "> Mit der Verifizierung stimmst du unserem Regelwerk zu.\n"
-                "> Du kannst dieses jederzeit unter <#1440371432877199397> einsehen.\n\n"
+                "> Du kannst dieses jederzeit unter <#1564891463081402448> einsehen.\n\n"
                 "- **Verifizierung:**\n"
                 "> Bevor du richtig loslegen kannst, musst du dich noch freischalten,\n"
                 "> um Zugriff auf alle Kanäle zu erhalten."
             ),
             accessory=discord.ui.Thumbnail(
-                media="https://images-ext-1.discordapp.net/external/8JT06RtO_W4n7L4NoSclCNQtpFvMoYzWmsUdkoZRKNk/%3Fsize%3D1024/https/cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?format=webp"
+                media="https://cdn.discordapp.com/banners/1535780243703472220/0fe8419d285cbc022a1c7428b3f42615.webp?size=1024"
             )
         ),
 
@@ -193,9 +160,9 @@ async def on_member_join(member):
                 url="https://www.tiktok.com/@eli97xo"
             ),
             discord.ui.Button(
-                label="Zur Verifizierung",
+                label="Zum Regelwerk",
                 style=discord.ButtonStyle.link,
-                url="https://discord.gg/FKjSYygj2f"
+                url="https://discord.gg/ScURUHSkgZ"
             )
         )
     )
@@ -206,128 +173,15 @@ async def on_member_join(member):
 
 #----------------verify panel-------
 
-GUILD_ID = 1440371431991935169
-VERIFY_ROLE_ID = 1441758416292024445
-REMOVE_ROLE_ID = 1512604669426536549
 
-
-class VerifyButton(discord.ui.Button):
-    def __init__(self):
-        super().__init__(
-            label="Verifizieren",
-            style=discord.ButtonStyle.success,
-            custom_id="verify_button"
-        )
-
-    async def callback(self, interaction: discord.Interaction):
-        verify_role = interaction.guild.get_role(VERIFY_ROLE_ID)
-        remove_role = interaction.guild.get_role(REMOVE_ROLE_ID)
-
-        if verify_role is None:
-            return await interaction.response.send_message(
-                "Verifizierungsrolle nicht gefunden.",
-                ephemeral=True
-            )
-
-        if verify_role in interaction.user.roles:
-            return await interaction.response.send_message(
-                "Du bist bereits verifiziert.",
-                ephemeral=True
-            )
-
-        await interaction.user.add_roles(verify_role)
-
-        if remove_role and remove_role in interaction.user.roles:
-            await interaction.user.remove_roles(remove_role)
-
-        await interaction.response.send_message(
-            "Du wurdest erfolgreich verifiziert!",
-            ephemeral=True
-        )
-class InfoButton(discord.ui.Button):
-    def __init__(self):
-        super().__init__(
-            label="Weitere Infos",
-            style=discord.ButtonStyle.secondary,
-
-        )
-
-    async def callback(self, interaction: discord.Interaction):
-        await interaction.response.send_message(
-            "**Weitere Informationen**\n\n"
-            "• Wir verlangen niemals auf fremde Links zu klicken.\n"
-            "• Der Verify Button verlinkt dich zu keinem Link.\n"
-            "• Die Verifzierung ist dafür da Fakeaccounts abzuwehren.",
-            ephemeral=True
-        )
-
-
-class VerifyPanel(discord.ui.LayoutView):
-    def __init__(self):
-        super().__init__(timeout=None)
-
-        button = VerifyButton()
-        info_button = InfoButton()
-        container = discord.ui.Container()
-
-
-
-        container.add_item(
-            discord.ui.TextDisplay(
-                "# Verifizierung\n"
-                f"**Informationen**\n"
-            )
-        )
-        container.add_item(discord.ui.Separator())
-
-        container.add_item(
-            discord.ui.Section(
-                discord.ui.TextDisplay(
-                    "> Mit der Verifizierung stimmst du unserem\n"
-                    "> <#1440371432877199397> zu.\n\n"
-                    "> Nach erfolgreicher Verifizierung erhältst du\n"
-                    "> Zugriff auf alle Kanäle."
-                ),
-                accessory=discord.ui.Thumbnail(
-                    media="https://cdn.discordapp.com/banners/1440371431991935169/54ccd3adb048eb0efde3097de052b5f4.webp?size=1024"
-                )
-            )
-        )
-
-        container.add_item(discord.ui.Separator())
-
-        verify_button = VerifyButton()
-        info_button = InfoButton()
-
-        row = discord.ui.ActionRow()
-        row.add_item(verify_button)
-        row.add_item(info_button)
-
-        container.add_item(row)
-
-        self.add_item(container)
-
-
-@bot.tree.command(
-    name="verifypanel",
-    description="Erstellt das Verify Panel",
-    guild=discord.Object(id=GUILD_ID)
-)
-async def verifypanel(interaction: discord.Interaction):
-    await interaction.channel.send(view=VerifyPanel())
-
-    await interaction.response.send_message(
-        "Verify Panel erstellt.",
-        ephemeral=True
-    )
 
 #-------------Activity--------------------
 
 statuses = [
-    "discord.gg/skybase",
+    "discord.gg/aslans",
     "Hosted by Yuqii",
-    "Skybase System",
-    "🎉Giveaway Incoming!🎉",
+    "Aslans Assistant",
+    "Giveaway Incoming!",
     "Verify for Chatting!",
 ]
 
@@ -360,12 +214,7 @@ async def on_ready():
 
 
 
-
-
-
-
-
-VOICE_CHANNEL_ID = 1513217517588582445
+VOICE_CHANNEL_ID = 1566120649053708368
 
 
 @bot.event
@@ -384,44 +233,10 @@ async def on_voice_state_update(member, before, after):
             print(f"Reconnect Fehler: {e}")
 
 
-TARGET_USERS = [
-    1325204584829947914,
-]
 
-@bot.event
-async def on_message(message):
-    if message.author.bot:
-        return
-
-    if message.author.id in TARGET_USERS:
-
-       
-        await message.reply("||Halt die fresse du fetter Bastard||")
-
-        try:
-          
-            await message.author.timeout(
-                timedelta(hours=1),
-                reason="Automatischer Timeout"
-            )
-
-            
-            await message.channel.send(
-                f" {message.author.mention} der drecks Albaner wurde für **1 Stunde** getimeoutet. Halt das nächste mal deine fresse bitte"
-            )
-
-        except discord.Forbidden:
-            await message.channel.send(
-                "Timeout failed"
-            )
-
-        except Exception as e:
-            print(f"Timeout Fehler: {e}")
-
-    await bot.process_commands(message)
 
 # -------anti webhook
-TRUSTED_ROLE_ID = 1440421346810134801 
+TRUSTED_ROLE_ID = 1564750335430369300
 
 @bot.event
 async def on_webhooks_update(channel: discord.abc.GuildChannel):
