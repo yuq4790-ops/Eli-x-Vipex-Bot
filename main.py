@@ -172,18 +172,17 @@ async def on_member_join(member):
     await channel.send(view=view)
 
 #----------------verify panel-------
-class TicketBot(commands.Bot):
+@bot.event
+async def on_ready():
+    activity = discord.Streaming(
+        name="Lunara Luxury",
+        url="https://www.twitch.tv/discord"
+    )
 
-    def __init__(self):
-        super().__init__(
-            command_prefix="!",
-            intents=intents,
-            status=discord.Status.online,
-            activity=discord.Streaming(
-                name="Aslans Assistant",
-                url="https://www.twitch.tv/discord"
-            )
-        )
+    await bot.change_presence(
+        status=discord.Status.online,
+        activity=activity
+    )
 
 
 #-------------Activity--------------------
