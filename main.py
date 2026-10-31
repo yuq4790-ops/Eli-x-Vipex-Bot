@@ -192,15 +192,6 @@ class TicketBot(commands.Bot):
 
 
 #-------------CALL--------------------------------------------
-@bot.event
-async def on_ready():
-    activity = discord.Game(name="Niggas")
-    await bot.change_presence(
-        status=discord.Status.streaming,
-        activity=activity
-    )
-
-
 
 
 
@@ -258,19 +249,31 @@ async def on_webhooks_update(channel: discord.abc.GuildChannel):
 async def on_ready():
     global live_tasks_started
 
+    # Permanenter Streaming-Status
+    activity = discord.Streaming(
+        name="Lunara Luxury",
+        url="https://www.twitch.tv/discord"
+    )
 
+    await bot.change_presence(
+        status=discord.Status.online,
+        activity=activity
+    )
+
+    print(f"Logged in als {bot.user}")
+    print("Streaming-Status gesetzt: Lunara Luxury")
+
+    # Slash-Commands synchronisieren
     try:
         synced = await bot.tree.sync(
             guild=discord.Object(id=GUILD_ID)
         )
         print(f"{len(synced)} Commands synchronisiert.")
+
     except Exception as e:
         print(f"Sync Fehler: {e}")
 
-    print(f"Logged in als {bot.user}")
-    print(TikTokLive.__version__)
-
-    # TikTok-Tasks nur EINMAL starten
+    # TikTok-Tasks nur einmal starten
     if not live_tasks_started:
         for user in TIKTOK_USERS:
             print(f"Starte TikTok-Task für {user}")
@@ -278,7 +281,7 @@ async def on_ready():
 
         live_tasks_started = True
 
-    # Voice Channel verbinden
+    # Voice-Channel verbinden
     try:
         guild = bot.get_guild(GUILD_ID)
 
@@ -298,9 +301,11 @@ async def on_ready():
             if vc is None:
                 await channel.connect()
                 print(f"Verbunden mit {channel.name}")
+
             elif vc.channel.id != VOICE_CHANNEL_ID:
                 await vc.move_to(channel)
                 print(f"In {channel.name} verschoben.")
+
             else:
                 print("Bot ist bereits im richtigen Voice Channel.")
 
