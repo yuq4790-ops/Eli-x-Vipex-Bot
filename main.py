@@ -14,7 +14,7 @@ import TikTokLive
 TOKEN = os.getenv("TOKEN")
 
 LIVE_CHANNEL_ID = 1564335456718688427
-
+GUILD_ID = 1535780243703472220
 
 TIKTOK_USERS = [
     "calli_eh",
