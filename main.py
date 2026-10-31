@@ -155,9 +155,9 @@ async def on_member_join(member):
                 url="https://www.tiktok.com/@vipexak"
             ),
             discord.ui.Button(
-                label="Elixo TikTok",
+                label="Calluci TikTok",
                 style=discord.ButtonStyle.link,
-                url="https://www.tiktok.com/@eli97xo"
+                url="https://www.tiktok.com/@calli_eh"
             ),
             discord.ui.Button(
                 label="Zum Regelwerk",
