@@ -268,7 +268,6 @@ async def on_webhooks_update(channel: discord.abc.GuildChannel):
 async def on_ready():
     global live_tasks_started
 
-    bot.add_view(VerifyPanel())
 
     try:
         synced = await bot.tree.sync(
