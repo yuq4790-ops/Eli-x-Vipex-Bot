@@ -58,7 +58,7 @@ async def start_live_client(username):
 
                     await channel.send(
                         f"{PING_ROLE}\n"
-                        f"🔴 **{username}** ist jetzt LIVE!\n"
+                        f" **{username}** ist jetzt LIVE!\n"
                         f"https://www.tiktok.com/@{username}/live"
                     )
 
@@ -172,7 +172,18 @@ async def on_member_join(member):
     await channel.send(view=view)
 
 #----------------verify panel-------
+class TicketBot(commands.Bot):
 
+    def __init__(self):
+        super().__init__(
+            command_prefix="!",
+            intents=intents,
+            status=discord.Status.online,
+            activity=discord.Streaming(
+                name="Aslans Assistant",
+                url="https://www.twitch.tv/discord"
+            )
+        )
 
 
 #-------------Activity--------------------
