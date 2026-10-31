@@ -277,9 +277,6 @@ async def on_ready():
 
         live_tasks_started = True
 
-    if not rotate_status.is_running():
-        rotate_status.start()
-
     # Voice Channel verbinden
     try:
         guild = bot.get_guild(GUILD_ID)
