@@ -142,7 +142,7 @@ async def on_member_join(member):
                 "> um Zugriff auf alle Kanäle zu erhalten."
             ),
             accessory=discord.ui.Thumbnail(
-                media="https://cdn.discordapp.com/banners/1535780243703472220/0fe8419d285cbc022a1c7428b3f42615.webp?size=1024"
+                media="https://cdn.discordapp.com/attachments/1436787199206096959/1566121294100045864/8c92b7a5-f167-45de-b258-6b885fdaf242.jpg?ex=6aea069d&is=6ae8b51d&hm=85225251c988f18b6d92616a2766aa6f6c0ca9e72400263408b9058f9537bc91&animated=true"
             )
         ),
 
